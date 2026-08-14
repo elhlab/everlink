@@ -17,7 +17,7 @@ class ApplicationState(TypedDict):
 
 
 @contextlib.asynccontextmanager
-async def lifespan(app: Starlette) -> AsyncGenerator[ApplicationState]:
+async def lifespan(app: Starlette) -> AsyncGenerator[ApplicationState, None]:
     core = Core()
 
     try:

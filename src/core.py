@@ -5,7 +5,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.exceptions import HTTPException
 
-from interfaces import ServiceDefinition, ServiceLike
+from .interfaces import ServiceDefinition, ServiceLike
 from .services import SERVICES
 
 
