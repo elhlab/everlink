@@ -1,0 +1,1 @@
+uv export --no-dev -o requirements.txt

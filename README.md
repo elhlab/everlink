@@ -1,0 +1,50 @@
+# everlink
+
+Everlink is a simple application that runs on your machine.
+It proxies downloads while keeping them alive if the session expires due to a long queue time, for example.
+
+This application is meant to be run with a download manager such as IDM (Internet Download Manager).
+These managers are great, but sometimes your queue fills up or an unstable download link keeps expiring.
+Everlink solves this by transparently refreshing the download link.
+
+## Installing
+
+Install [uv](https://docs.astral.sh/uv/) and run:
+
+```shell
+uv sync
+```
+
+### Running
+
+Once installed, start Everlink with:
+
+```shell
+uv run everlink
+```
+
+By default, Everlink listens on `0.0.0.0:8000`. You can change this and other settings using the environment variables below.
+
+### Environment variables
+
+| Variable      | Default   | Description                                               |
+| ------------- | --------- | --------------------------------------------------------- |
+| `BIND_HOST`   | `0.0.0.0` | Host address the server binds to.                         |
+| `PORT`        | `8000`    | Port the server listens on.                               |
+| `DEVELOPMENT` | `false`   | Enables development features such as automatic reloading. |
+| `LOG_LEVEL`   | `INFO`    | Logging level, e.g. `DEBUG`, `INFO`, `WARNING`, `ERROR`.  |
+| `LOG_FILE`    | —         | Path to the log file. If unset, file logging is disabled. |
+
+## Intercepting downloads
+
+To use the transparent proxy, you can intercept downloads with a simple userscript for your browser that replaces the download link for the service.
+
+Alternatively, you can manually copy the slug and add the download using:
+
+`http://localhost:8000/<service>/<url-encoded-slug>`
+
+The slug should be URL-encoded before being added to the URL.
+
+For example, if the slug is `abc/123`:
+
+`http://localhost:8000/example/abc%2F123`
