@@ -24,7 +24,6 @@ RUN pip install --no-cache-dir --no-deps /tmp/*.whl \
 COPY --chmod=755 docker/entrypoint.sh /entrypoint.sh
 
 # The application listens on port 8000 by default.
-# This can be changed with the PORT environment variable.
 EXPOSE 8000
 
 ENTRYPOINT ["/entrypoint.sh"]
