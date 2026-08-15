@@ -41,15 +41,6 @@ async def download_handler(request: Request[ApplicationState]):
     )
 
     response = await core.route_request(cast(Request, request), service_id, slug)
-    logger.info(
-        '%s - "%s %s" %s %s',
-        request.client.host if request.client else "...",
-        request.method,
-        request.url.path,
-        response.status_code,
-        http.HTTPStatus(response.status_code).phrase,
-    )
-
     return response
 
 
