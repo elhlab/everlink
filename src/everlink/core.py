@@ -1,12 +1,15 @@
-from typing import Optional
 import asyncio
 import logging
+
+from pathlib import Path
+from importlib.util import module_from_spec, spec_from_file_location
 
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.exceptions import HTTPException
 
 from .interfaces import ServiceDefinition, ServiceLike
+from .config import IS_DEV_ENV
 from .services import SERVICES
 
 logger = logging.getLogger(__name__)
@@ -17,28 +20,46 @@ class Core:
     definitions: dict[str, ServiceDefinition]
     services: dict[str, ServiceLike]
 
-    def __init__(
-        self,
-        services: Optional[list[ServiceDefinition]] = None,
-        overwrite_services: bool = False,
-    ) -> None:
+    def __init__(self, custom_services: Path) -> None:
 
-        service_definitions = {}
-        if not overwrite_services:
-            service_definitions.update(SERVICES)
+        service_definitions = dict(SERVICES)
+        service_definitions.update(self.load_custom_definitions(custom_services))
 
-        if services:
-            for service in services:
-                service_definitions[service.id] = service
-
-        self.definitions = service_definitions
         self.services = {}
+        self.definitions = service_definitions
 
         logger.debug(
             "Loaded %d service definitions: %s",
             len(self.definitions),
             ", ".join(self.definitions.keys()),
         )
+
+    def load_custom_definitions(self, path: Path) -> dict[str, ServiceDefinition]:
+        """Loads user provided custom service definitions"""
+
+        services = {}
+        for file in path.glob("*.py"):
+            if file.name.startswith("_") and not IS_DEV_ENV:
+                continue
+
+            spec = spec_from_file_location(file.stem, file)
+
+            if spec is None or spec.loader is None:
+                continue
+
+            module = module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            definition = getattr(module, "definition", None)
+            if not isinstance(definition, ServiceDefinition):
+                continue
+
+            if definition.id in services:
+                raise ValueError(f"Duplicate custom service ID: {definition.id!r}")
+
+            services[definition.id] = definition
+
+        return services
 
     async def get_service(self, service_id: str) -> ServiceLike | None:
         if service_id in self.services:

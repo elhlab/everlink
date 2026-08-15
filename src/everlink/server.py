@@ -5,12 +5,11 @@ import contextlib
 from typing import AsyncGenerator, TypedDict, cast
 from urllib.parse import unquote
 
-
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.routing import Route
 
-from .config import IS_DEV_ENV
+from .config import CUSTOM_SERVICES_PATH, IS_DEV_ENV, log_config
 from .core import Core
 
 logger = logging.getLogger(__name__)
@@ -22,7 +21,9 @@ class ApplicationState(TypedDict):
 
 @contextlib.asynccontextmanager
 async def lifespan(app: Starlette) -> AsyncGenerator[ApplicationState, None]:
-    async with Core() as core:
+
+    log_config()
+    async with Core(custom_services=CUSTOM_SERVICES_PATH) as core:
         yield {"core": core}
 
 

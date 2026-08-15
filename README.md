@@ -27,13 +27,26 @@ By default, Everlink listens on `0.0.0.0:8000`. You can change this and other se
 
 ### Environment variables
 
-| Variable      | Default   | Description                                               |
-| ------------- | --------- | --------------------------------------------------------- |
-| `BIND_HOST`   | `0.0.0.0` | Host address the server binds to.                         |
-| `PORT`        | `8000`    | Port the server listens on.                               |
-| `DEVELOPMENT` | `false`   | Enables development features such as automatic reloading. |
-| `LOG_LEVEL`   | `INFO`    | Logging level, e.g. `DEBUG`, `INFO`, `WARNING`, `ERROR`.  |
-| `LOG_FILE`    | —         | Path to the log file. If unset, file logging is disabled. |
+| Variable               | Default           | Description                                               |
+|------------------------|-------------------|-----------------------------------------------------------|
+| `BIND_HOST`            | `0.0.0.0`         | Host address the server binds to.                         |
+| `PORT`                 | `8000`            | Port the server listens on.                               |
+| `DEVELOPMENT`          | `false`           | Enables development features such as automatic reloading. |
+| `LOG_LEVEL`            | `INFO`            | Logging level, e.g. `DEBUG`, `INFO`, `WARNING`, `ERROR`.  |
+| `CUSTOM_SERVICES_PATH` | `custom-services` | Path to the custom-services directory.                    |
+| `LOG_FILE`             | —                 | Path to the log file. If unset, file logging is disabled. |
+
+### Custom Services
+
+You can add your own services by placing them in the `custom-services` directory, or by specifying a different directory with the `CUSTOM_SERVICES_PATH` environment variable.
+
+See `_example.py` for an example of how to define a custom downloader. For built-in service implementations, see `src/everlink/services/`.
+
+Custom services are discovered dynamically. Everlink imports each `.py` file in the configured directory and looks for a `definition` variable containing a `ServiceDefinition` instance (see `src/everlink/interfaces.py`). Files whose names start with `_` are ignored.
+
+In development mode, files starting with `_` are imported as well. This allows files such as `_example.py` to be loaded for testing.
+
+Each service must have a unique ID. If a custom service has the same ID as a built-in service, the custom service takes precedence and replaces the built-in service.
 
 ## Intercepting downloads
 
