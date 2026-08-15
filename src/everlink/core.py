@@ -3,6 +3,7 @@ import logging
 
 from pathlib import Path
 from importlib.util import module_from_spec, spec_from_file_location
+from typing import Optional
 
 from starlette.requests import Request
 from starlette.responses import Response
@@ -20,15 +21,16 @@ class Core:
     definitions: dict[str, ServiceDefinition]
     services: dict[str, ServiceLike]
 
-    def __init__(self, custom_services: Path) -> None:
+    def __init__(self, custom_services: Optional[Path]) -> None:
 
         service_definitions = dict(SERVICES)
-        service_definitions.update(self.load_custom_definitions(custom_services))
+        if custom_services is not None:
+            service_definitions.update(self.load_custom_definitions(custom_services))
 
         self.services = {}
         self.definitions = service_definitions
 
-        logger.debug(
+        logger.info(
             "Loaded %d service definitions: %s",
             len(self.definitions),
             ", ".join(self.definitions.keys()),

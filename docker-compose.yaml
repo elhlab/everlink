@@ -1,0 +1,16 @@
+services:
+  everlink:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # BIND_HOST: 0.0.0.0
+      # PORT: 8000
+      # DEVELOPMENT: false
+      # LOG_LEVEL: INFO
+      # LOG_FILE:
+      CUSTOM_SERVICES_PATH: "/custom-services"
+    volumes:
+      - ./custom-services:/custom-services

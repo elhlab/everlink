@@ -11,11 +11,14 @@ LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
 BIND_HOST = os.environ.get("BIND_HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "8000"))
 
-CUSTOM_SERVICES_PATH = Path(os.environ.get("CUSTOM_SERVICES_PATH", "custom-services"))
-if not CUSTOM_SERVICES_PATH.is_dir():
-    raise ValueError(
-        f"Invalid CUSTOM_SERVICES_PATH: not a directory: {CUSTOM_SERVICES_PATH}"
-    )
+CUSTOM_SERVICES_PATH = os.environ.get("CUSTOM_SERVICES_PATH", None)
+if CUSTOM_SERVICES_PATH:
+    CUSTOM_SERVICES_PATH = Path(CUSTOM_SERVICES_PATH)
+
+    if not CUSTOM_SERVICES_PATH.is_dir():
+        raise ValueError(
+            f"Invalid CUSTOM_SERVICES_PATH: not a directory: {CUSTOM_SERVICES_PATH}"
+        )
 
 LOG_FILE = os.environ.get("LOG_FILE")
 if LOG_FILE:

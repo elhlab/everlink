@@ -1,0 +1,1 @@
+docker build -t everlink:latest -f docker/Dockerfile .
