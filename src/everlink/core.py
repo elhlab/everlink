@@ -2,8 +2,8 @@ import asyncio
 import logging
 
 from pathlib import Path
-from importlib.util import module_from_spec, spec_from_file_location
 from typing import Optional
+from importlib.util import module_from_spec, spec_from_file_location
 
 from starlette.requests import Request
 from starlette.responses import Response
@@ -64,6 +64,8 @@ class Core:
         return services
 
     async def get_service(self, service_id: str) -> ServiceLike | None:
+        """Get a service by ID, initializing it on first access."""
+
         if service_id in self.services:
             return self.services[service_id]
 
@@ -97,4 +99,5 @@ class Core:
     async def close(self):
         if self.services:
             logger.info("Closing %d services", len(self.services))
-        await asyncio.gather(*(s.destroy() for s in self.services.values()))
+
+        await asyncio.gather(*(s.close() for s in self.services.values()))

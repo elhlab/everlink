@@ -15,7 +15,7 @@ class Example(ServiceLike):
     async def handle_request(self, request: Request, slug: str) -> Response:
         return Response("Hello World")
 
-    async def destroy(self):
+    async def close(self):
         return
 
 

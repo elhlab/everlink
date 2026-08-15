@@ -1,9 +1,3 @@
-import logging
-import os
-
-from logging.handlers import RotatingFileHandler
-from pathlib import Path
-
 from .config import IS_DEV_ENV, LOG_FILE, LOG_LEVEL, BIND_HOST, PORT
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"

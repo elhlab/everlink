@@ -63,12 +63,9 @@ def get_streaming_headers(h: Headers | CIMultiDict) -> CIMultiDict:
 
 
 def get_navigate_headers() -> CIMultiDict[str]:
-    headers = CIMultiDict()
-    headers.update(
+    return CIMultiDict(
         {
-            "Accept": (
-                "text/html,application/xhtml+xml," "application/xml;q=0.9,*/*;q=0.8"
-            ),
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "en-US;q=0.9,en;q=0.8",
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) "
@@ -82,8 +79,6 @@ def get_navigate_headers() -> CIMultiDict[str]:
             "sec-gpc": "1",
         }
     )
-
-    return headers
 
 
 async def stream_reader(response: aiohttp.ClientResponse):
