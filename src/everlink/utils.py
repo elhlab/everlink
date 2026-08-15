@@ -86,7 +86,7 @@ async def stream_reader(response: aiohttp.ClientResponse):
         async for chunk in response.content.iter_chunked(64 * 1024):
             yield chunk
     except asyncio.CancelledError:
-        logger.info("Client cancelled stream")
+        logger.debug("Client cancelled stream")
     finally:
         logger.debug("Closed upstream connection")
         response.release()
