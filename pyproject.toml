@@ -2,7 +2,7 @@
 name = "everlink"
 version = "1.0.0"
 authors = [
-  { name="ElhLab", email="elh.git@proton.me" },
+  { name="Elh", email="elh.git@proton.me" },
 ]
 description = "A simple proxy that automatically refreshes expired download links for download managers."
 readme = "README.md"
