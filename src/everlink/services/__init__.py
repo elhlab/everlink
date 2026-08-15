@@ -1,3 +1,8 @@
-_SERVICE_MODULES = ()
+from ..interfaces import ServiceDefinition
+from ..services import gdrive
 
-SERVICES = {module.definition.id: module.definition for module in _SERVICE_MODULES}
+_SERVICE_MODULES = (gdrive,)
+
+SERVICES: dict[str, ServiceDefinition] = {
+    module.definition.id: module.definition for module in _SERVICE_MODULES
+}
